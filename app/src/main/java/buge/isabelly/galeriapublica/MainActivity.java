@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.Manifest;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;// define o bottomViewNavigation como um atributo da classe MainActivity
+    static int RESULT_REQUEST_PERMISSION = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +51,13 @@ public class MainActivity extends AppCompatActivity {
                 vm.setNavigationOpSelected(item.getItemId());//guarda no MainViewModel a opcao escolhida
 
                 //define acoes a ser realizadas para cada opcao
-                switch (item.getItemId()) {
-                    case R.id.gridViewOp:
-                        GridViewFragment gridViewFragment = GridViewFragment.newInstance();
-                        setFragment(gridViewFragment);
-                        break;
-                    case R.id.listViewOp:
-                        ListViewFragment listViewFragment = ListViewFragment.newInstance();
-                        setFragment(listViewFragment);
-                        break;
-
+                if (item.getItemId() == R.id.gridViewOp) {
+                    GridViewFragment gridViewFragment = GridViewFragment.newInstance();
+                    setFragment(gridViewFragment);
+                }
+                if (item.getItemId() == R.id.listViewOp){
+                    ListViewFragment listViewFragment = ListViewFragment.newInstance();
+                    setFragment(listViewFragment);
                 }
                 return true;
             }
@@ -89,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
             if(!hasPermission(permission)) {
                 permissionsNotGranted.add(permission);
             }
+
         }
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

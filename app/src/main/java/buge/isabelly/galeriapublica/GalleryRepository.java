@@ -27,8 +27,8 @@ public class GalleryRepository {
     public List<ImageData> loadImageData (Integer limit, Integer offSet) throws FileNotFoundException {
 
         List<ImageData> imageDataList = new ArrayList<>();
-        int w = (int) context.getResources().getDimension(R.dimen.im_width);
-        int h = (int) context.getResources().getDimension(R.dimen.im_height);
+        int w = 100;
+        int h = 100;
 
         String[] projection = new String[] {MediaStore.Images.Media._ID,
                 MediaStore.Images.Media.DISPLAY_NAME,
@@ -85,7 +85,7 @@ public class GalleryRepository {
             Bitmap thumb = Util.getBitmap(context, contentUri, w, h);
             // Stores column values and the contentUri in a local object
             // that represents the media file.
-            imageDataList.add(new ImageData(contentUri, thumb, name, new Date(dateAdded*1000L), size))
+            imageDataList.add(new ImageData(contentUri, thumb, name, new Date(dateAdded*1000L), size));
         }
         return imageDataList;
     }
