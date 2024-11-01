@@ -2,7 +2,16 @@ package buge.isabelly.galeriapublica;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.paging.PagingData;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,40 +24,39 @@ import android.view.ViewGroup;
  */
 public class GridViewFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private MainViewModel mViewModel;
+    private View view;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public GridViewFragment() {
-        // Required empty public constructor
-    }
-
-
-    // TODO: Rename and change types and number of parameters
+    ///cria uma instância do Fragmento e retorna
     public static GridViewFragment newInstance() {
-        GridViewFragment fragment = new GridViewFragment();
-
-        return fragment;
+        return new GridViewFragment();
     }
 
+    //chamado toda vez que o fragmento é setado em uma Activity, criar a interface de usuário do fragmento
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_grid_view, container, false);
+        return view;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_grid_view, container, false);
+    //chamado depois de onCreateView
+    //Quando chamado garante-se que todos os elementos da interface do fragmento foram criados.
+    //dentro deste método que se configura o RecycleView.
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
+        GridAdapter gridAdapter = new GridAdapter(new ImageDataComparator());
+        LiveData<PagingData<ImageData>> liveData = mViewModel.getPageLv();
+        liveData.observe(getViewLifecycleOwner(), new Observer<PagingData<ImageData>>() {
+
+            @Override
+            public void onChanged(PagingData<ImageData> objectPagingData) {
+                gridAdapter.submitData(getViewLifecycleOwner().getLifecycle(),objectPagingData);
+            }
+        });
+
+        RecyclerView rvGallery = (RecyclerView) view.findViewById(R.id.rvGrid);
+        rvGallery.setAdapter(gridAdapter);
+        rvGallery.setLayoutManager(new GridLayoutManager(getContext(), 4));
     }
 }

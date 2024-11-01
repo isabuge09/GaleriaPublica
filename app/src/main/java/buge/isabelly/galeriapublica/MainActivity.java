@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //seta o fragmento passado como parametro
     void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragContainer, fragment);
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    //pede permissao de acesso de leitura ao armazenamento público
     @Override
     protected void onResume(){
         super.onResume();

@@ -5,12 +5,10 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.media.DrmInitData;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.webkit.URLUtil;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -24,6 +22,7 @@ public class GalleryRepository {
         this.context = context;
     }
 
+    // recebe uma qtd de fotos e retorna uma lista referente a uma pagina de dados
     public List<ImageData> loadImageData (Integer limit, Integer offSet) throws FileNotFoundException {
 
         List<ImageData> imageDataList = new ArrayList<>();
